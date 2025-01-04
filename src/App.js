@@ -50,8 +50,8 @@ function App() {
       
       {/* Timer(B/W) */}
       <div className="timer-container">
-        <Timer player="Black" />
-        <Timer player="White" />
+        <Timer player="Black" isActive={currentPlayer === 'black'}/>
+        <Timer player="White" isActive={currentPlayer === 'white'}/>
       </div>
 
       {/* Board */}
