@@ -4,7 +4,8 @@ import './Board.css';
 
 function Board({ onPlaceStone, moveHistory }) {
   // Hexa-board array
-  const boardRows = [3, 4, 5, 4, 3];
+  const boardRows = [3, 4, 5, 6, 5, 4, 3];
+  const lowercsaseIndexBase = [3, 4, 5, 6, 6, 6, 6];
 
   let rows = [];
   let uppercaseIndex = 0;
@@ -15,6 +16,7 @@ function Board({ onPlaceStone, moveHistory }) {
 
   for (let rowIndex = 0; rowIndex < boardRows.length; rowIndex++) {
     let cells = [];
+    lowercaseIndex = lowercsaseIndexBase[rowIndex] - 1
     // NumIndex controll (/)
     for (let colIndex = 0; colIndex < boardRows[rowIndex]; colIndex++) {
       // Generate coordinate
@@ -38,8 +40,8 @@ function Board({ onPlaceStone, moveHistory }) {
       );
 
       // LowercaseIndex (\) controll
-      lowercaseIndex++;
-      if (lowercaseIndex >= lowercase.length) lowercaseIndex = 0;
+      lowercaseIndex--;
+      if (lowercaseIndex < 0) lowercaseIndex = 0;
     }
     // UppercaseIndex (-) controll
     uppercaseIndex++;

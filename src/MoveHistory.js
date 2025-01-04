@@ -14,7 +14,7 @@ function MoveHistory({ moveHistory }) {
       <ul>
         {filteredHistory.map((move, idx) => (
           <li key={idx}>
-            [{idx + 1}] {move.player} @ {move.coordinate}, time: {move.time}
+            [{idx + 1}] {move.player === 'black' ? 'B' : 'W'}{move.coordinate}, time: {move.time}
           </li>
         ))}
       </ul>

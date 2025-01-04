@@ -41,12 +41,12 @@ function App() {
 
   // Resign
   const handleResign = () => {
-    alert(`${currentPlayer} is resigning!`);
+    alert(`${currentPlayer} resigned!`);
   };
 
   return (
     <div className="App">
-      <h1>Hex Baduk (Depth: 3)</h1>
+      <h1>Hexa-Go (Depth: 3)</h1>
       
       {/* Timer(B/W) */}
       <div className="timer-container">
