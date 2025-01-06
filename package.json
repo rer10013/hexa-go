@@ -1,7 +1,7 @@
 {
   "homepage": "https://rer10013.github.io/hexa-go-build/",
   "name": "hexa-go",
-  "version": "T0.2.2",
+  "version": "T0.3.0",
   "private": true,
   "dependencies": {
     "cra-template": "1.2.0",
