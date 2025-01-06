@@ -14,11 +14,15 @@ function App() {
   // Captured stones
   const [capturedStones, setCapturedStones] = useState({ black: 0, white: 0 });
 
+  // Whether game end
+  const [isGameOver, setIsGameOver] = useState(false);
+
   // Placing stones
   const handlePlaceStone = (coordinate) => {
-    if (moveHistory.find((move) => move.coordinate === coordinate)) {
+    if (isGameOver || moveHistory.find((move) => move.coordinate === coordinate)) {
       return;
     }
+
     // Save to history
     const newMove = {
       coordinate,
@@ -39,6 +43,12 @@ function App() {
     setCurrentPlayer(currentPlayer === 'black' ? 'white' : 'black');
   };
 
+  // Board is full
+  const handleGameEnd = () => {
+    setIsGameOver(true);
+    alert('Game over! The board is full.');
+  };
+
   // Resign
   const handleResign = () => {
     alert(`${currentPlayer} resigned!`);
@@ -55,7 +65,7 @@ function App() {
       </div>
 
       {/* Board */}
-      <Board onPlaceStone={handlePlaceStone} moveHistory={moveHistory} />
+      <Board onPlaceStone={handlePlaceStone} moveHistory={moveHistory} onGameEnd={handleGameEnd}/>
 
       {/* Num of Captured stones */}
       <div className="captured">

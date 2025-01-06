@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import HexCell from './HexCell';
 import './Board.css';
 
-function Board({ onPlaceStone, moveHistory }) {
+function Board({ onPlaceStone, moveHistory, onGameEnd }) {
   // Hexa-board array
   const boardRows = [3, 4, 5, 6, 5, 4, 3];
   const lowercsaseIndexBase = [3, 4, 5, 6, 6, 6, 6];
+  const spaceNum = boardRows.reduce((a, b) => a + b, 0);
+
+  useEffect(() => {
+    if (moveHistory.length === spaceNum) {
+      onGameEnd();
+    }
+  }, [moveHistory, spaceNum, onGameEnd]);
 
   let rows = [];
   let uppercaseIndex = 0;
