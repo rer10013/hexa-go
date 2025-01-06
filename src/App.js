@@ -17,6 +17,9 @@ function App() {
   // Whether game end
   const [isGameOver, setIsGameOver] = useState(false);
 
+  // depth signing (will be fixed to dynamic)
+  const depth = 2
+
   // Placing stones
   const handlePlaceStone = (coordinate) => {
     if (isGameOver || moveHistory.find((move) => move.coordinate === coordinate)) {
@@ -65,7 +68,7 @@ function App() {
       </div>
 
       {/* Board */}
-      <Board onPlaceStone={handlePlaceStone} moveHistory={moveHistory} onGameEnd={handleGameEnd}/>
+      <Board depth={depth} onPlaceStone={handlePlaceStone} moveHistory={moveHistory} onGameEnd={handleGameEnd}/>
 
       {/* Num of Captured stones */}
       <div className="captured">

@@ -2,53 +2,61 @@ import React, { useEffect } from 'react';
 import TriCell from './TriCell';
 import './Board.css';
 
-function Board({ onPlaceStone, moveHistory, onGameEnd }) {
-  const boardRows = [3, 4, 5, 6, 5, 4, 3];
-  const spaceNum = boardRows.reduce((a, b) => a + b, 0) * 2; // Each Triagon now has 6 triangles
+function Board({ depth, onPlaceStone, moveHistory, onGameEnd }) {
+  const totalRows = 2 * depth;
 
+  // Compute number of Triangles
+  const spaceNum = depth * depth * 6;
   useEffect(() => {
     if (moveHistory.length === spaceNum) {
       onGameEnd();
     }
   }, [moveHistory, spaceNum, onGameEnd]);
 
-  let rows = [];
-  let uppercaseIndex = 0;
-  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  // generate row cells
+  const generateRowCells = (rowIndex, isIncreasing) => {
+    const rowCells = [];
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-  for (let rowIndex = 0; rowIndex < boardRows.length; rowIndex++) {
-    let cells = [];
-    for (let colIndex = 0; colIndex < boardRows[rowIndex]; colIndex++) {
-      // Create 2 triangles per Triagon
-      const upCoordinate = `${uppercase[uppercaseIndex]}${colIndex + 1}U`;
-      const downCoordinate = `${uppercase[uppercaseIndex]}${colIndex + 1}D`;
+    const startWithUp = isIncreasing;
+    const blockCount = isIncreasing
+      ? (depth + rowIndex) * 2 + 1
+      : (2 * depth - rowIndex + 1) * 2 + 1;
 
-      const upStone = moveHistory.find((move) => move.coordinate === upCoordinate)?.player;
-      const downStone = moveHistory.find((move) => move.coordinate === downCoordinate)?.player;
+    for (let blockIndex = 0; blockIndex < blockCount; blockIndex++) {
+      const orientation = (blockIndex % 2 === 0) === startWithUp ? "U" : "D";
+      const coordinate = `${uppercase[rowIndex]}${blockIndex + 1}`;
 
-      cells.push(
+      // Find stone is placed
+      const stone = moveHistory.find((move) => move.coordinate === coordinate)?.player;
+
+      // Push TriCell
+      rowCells.push(
         <TriCell
-          key={upCoordinate}
-          coordinate={upCoordinate}
-          stone={upStone}
-          onClick={() => onPlaceStone(upCoordinate)}
-          orientation="up"
-        />
-      );
-      cells.push(
-        <TriCell
-          key={downCoordinate}
-          coordinate={downCoordinate}
-          stone={downStone}
-          onClick={() => onPlaceStone(downCoordinate)}
-          orientation="down"
+          key={coordinate}
+          coordinate={coordinate}
+          stone={stone}
+          onClick={() => onPlaceStone(coordinate)}
+          orientation={orientation === "U" ? "up" : "down"}
         />
       );
     }
-    uppercaseIndex++;
+
+    return rowCells;
+  };
+
+  // Build rows
+  const rows = [];
+  for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
+    const isIncreasing = rowIndex < depth;
+    const rowCells = generateRowCells(rowIndex, isIncreasing);
+
     rows.push(
-      <div className="board-row" key={rowIndex}>
-        {cells}
+      <div
+        className={`board-row ${rowIndex % 2 === 1 ? "offset-row" : ""}`}
+        key={rowIndex}
+      >
+        {rowCells}
       </div>
     );
   }
