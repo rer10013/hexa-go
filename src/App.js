@@ -59,7 +59,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Tri-Go (Depth: 4)</h1>
+      <h1>Tri-Go (Depth: 2)</h1>
       
       {/* Timer(B/W) */}
       <div className="timer-container">
