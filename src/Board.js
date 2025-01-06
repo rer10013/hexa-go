@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
-import HexCell from './HexCell';
+import TriCell from './TriCell';
 import './Board.css';
 
 function Board({ onPlaceStone, moveHistory, onGameEnd }) {
-  // Hexa-board array
   const boardRows = [3, 4, 5, 6, 5, 4, 3];
-  const lowercsaseIndexBase = [3, 4, 5, 6, 6, 6, 6];
-  const spaceNum = boardRows.reduce((a, b) => a + b, 0);
+  const spaceNum = boardRows.reduce((a, b) => a + b, 0) * 2; // Each Triagon now has 6 triangles
 
   useEffect(() => {
     if (moveHistory.length === spaceNum) {
@@ -16,44 +14,38 @@ function Board({ onPlaceStone, moveHistory, onGameEnd }) {
 
   let rows = [];
   let uppercaseIndex = 0;
-  let lowercaseIndex = 0;
-
   const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowercase = "abcdefghijklmnopqrstuvwxyz";
 
   for (let rowIndex = 0; rowIndex < boardRows.length; rowIndex++) {
     let cells = [];
-    lowercaseIndex = lowercsaseIndexBase[rowIndex] - 1
-    // NumIndex controll (/)
     for (let colIndex = 0; colIndex < boardRows[rowIndex]; colIndex++) {
-      // Generate coordinate
-      const coordinate = 
-        uppercase[uppercaseIndex] + 
-        lowercase[lowercaseIndex] + 
-        (colIndex + 1).toString();
+      // Create 2 triangles per Triagon
+      const upCoordinate = `${uppercase[uppercaseIndex]}${colIndex + 1}U`;
+      const downCoordinate = `${uppercase[uppercaseIndex]}${colIndex + 1}D`;
 
-      // Check move history
-      const stone = moveHistory.find(
-        (move) => move.coordinate === coordinate
-      )?.player;
+      const upStone = moveHistory.find((move) => move.coordinate === upCoordinate)?.player;
+      const downStone = moveHistory.find((move) => move.coordinate === downCoordinate)?.player;
 
       cells.push(
-        <HexCell
-          key={coordinate}
-          coordinate={coordinate}
-          stone={stone} 
-          onClick={() => onPlaceStone(coordinate)}
+        <TriCell
+          key={upCoordinate}
+          coordinate={upCoordinate}
+          stone={upStone}
+          onClick={() => onPlaceStone(upCoordinate)}
+          orientation="up"
         />
       );
-
-      // LowercaseIndex (\) controll
-      lowercaseIndex--;
-      if (lowercaseIndex < 0) lowercaseIndex = 0;
+      cells.push(
+        <TriCell
+          key={downCoordinate}
+          coordinate={downCoordinate}
+          stone={downStone}
+          onClick={() => onPlaceStone(downCoordinate)}
+          orientation="down"
+        />
+      );
     }
-    // UppercaseIndex (-) controll
     uppercaseIndex++;
-    if (uppercaseIndex >= uppercase.length) uppercaseIndex = 0;
-
     rows.push(
       <div className="board-row" key={rowIndex}>
         {cells}
@@ -61,11 +53,7 @@ function Board({ onPlaceStone, moveHistory, onGameEnd }) {
     );
   }
 
-  return (
-    <div className="board-container">
-      {rows}
-    </div>
-  );
+  return <div className="board-container">{rows}</div>;
 }
 
 export default Board;

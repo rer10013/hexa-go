@@ -4,4 +4,4 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## How to play
 
-This game is basically Go, but the board is hexagon!!
+This game is basically Go, but the board is Triangle!!
