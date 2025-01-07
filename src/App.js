@@ -17,7 +17,7 @@ function App() {
   // Whether game end
   const [isGameOver, setIsGameOver] = useState(false);
 
-  // depth signing (will be fixed to dynamic)
+  // depth signing (will be fixed to dynamic button)
   const depth = 2
 
   // Placing stones

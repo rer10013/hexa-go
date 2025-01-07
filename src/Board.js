@@ -21,7 +21,7 @@ function Board({ depth, onPlaceStone, moveHistory, onGameEnd }) {
     const startWithUp = isIncreasing;
     const blockCount = isIncreasing
       ? (depth + rowIndex) * 2 + 1
-      : (2 * depth - rowIndex + 1) * 2 + 1;
+      : (totalRows - rowIndex + depth - 1) * 2 + 1;
 
     for (let blockIndex = 0; blockIndex < blockCount; blockIndex++) {
       const orientation = (blockIndex % 2 === 0) === startWithUp ? "U" : "D";
