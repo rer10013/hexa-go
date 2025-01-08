@@ -18,7 +18,7 @@ function App() {
   const [isGameOver, setIsGameOver] = useState(false);
 
   // depth signing (will be fixed to dynamic button)
-  const depth = 4
+  const depth = 2
 
   // Placing stones
   const handlePlaceStone = (coordinate) => {
@@ -59,7 +59,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Tri-Go (Depth: 2)</h1>
+      <h1>Tri-Go (Depth: {depth})</h1>
       
       {/* Timer(B/W) */}
       <div className="timer-container">

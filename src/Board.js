@@ -16,7 +16,6 @@ function Board({ depth, onPlaceStone, moveHistory, onGameEnd }) {
   // Build rows and cells
   const rows = [];
   const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const lowercase = "abcdefghijklmnopqrstuvwxyz";
 
   for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
     const isIncreasing = rowIndex < depth;
