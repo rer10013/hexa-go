@@ -13,21 +13,24 @@ function Board({ depth, onPlaceStone, moveHistory, onGameEnd }) {
     }
   }, [moveHistory, spaceNum, onGameEnd]);
 
-  // generate row cells
-  const generateRowCells = (rowIndex, isIncreasing) => {
-    const rowCells = [];
-    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  // Build rows and cells
+  const rows = [];
+  const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const lowercase = "abcdefghijklmnopqrstuvwxyz";
 
+  for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
+    const isIncreasing = rowIndex < depth;
     const startWithUp = isIncreasing;
     const blockCount = isIncreasing
       ? (depth + rowIndex) * 2 + 1
       : (totalRows - rowIndex + depth - 1) * 2 + 1;
 
+    const rowCells = [];
     for (let blockIndex = 0; blockIndex < blockCount; blockIndex++) {
       const orientation = (blockIndex % 2 === 0) === startWithUp ? "U" : "D";
-      const coordinate = `${uppercase[rowIndex]}${blockIndex + 1}`;
+      const coordinate = `${uppercase[rowIndex]}${blockIndex + 1 + (isIncreasing ? 0 : (rowIndex - depth) * 2 + 1)}`;
 
-      // Find stone is placed
+      // Find if stone is placed
       const stone = moveHistory.find((move) => move.coordinate === coordinate)?.player;
 
       // Push TriCell
@@ -41,15 +44,6 @@ function Board({ depth, onPlaceStone, moveHistory, onGameEnd }) {
         />
       );
     }
-
-    return rowCells;
-  };
-
-  // Build rows
-  const rows = [];
-  for (let rowIndex = 0; rowIndex < totalRows; rowIndex++) {
-    const isIncreasing = rowIndex < depth;
-    const rowCells = generateRowCells(rowIndex, isIncreasing);
 
     rows.push(
       <div

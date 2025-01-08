@@ -18,7 +18,7 @@ function App() {
   const [isGameOver, setIsGameOver] = useState(false);
 
   // depth signing (will be fixed to dynamic button)
-  const depth = 2
+  const depth = 4
 
   // Placing stones
   const handlePlaceStone = (coordinate) => {
