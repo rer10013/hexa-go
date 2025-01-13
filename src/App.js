@@ -3,6 +3,7 @@ import Board from './Board';
 import Timer from './Timer';
 import MoveHistory from './MoveHistory';
 import ResignButton from './ResignButton';
+import { evaluateMove } from './captureLogic';
 
 function App() {
   // History
@@ -18,34 +19,52 @@ function App() {
   const [isGameOver, setIsGameOver] = useState(false);
 
   // depth signing (will be fixed to dynamic button)
-  const depth = 2
+  const depth = 3
 
-  // Placing stones
+  const buildBoardMapping = () => {
+    return moveHistory.reduce((acc, move) => {
+      acc[move.coordinate] = move.player;
+      return acc;
+    }, {});
+  };
+
   const handlePlaceStone = (coordinate) => {
+
+    // Board is full or move already exists.
     if (isGameOver || moveHistory.find((move) => move.coordinate === coordinate)) {
       return;
     }
 
-    // Save to history
+    const boardMapping = buildBoardMapping();
+
+    // Evaluate the move:
+    const { valid, captured } = evaluateMove(coordinate, boardMapping, currentPlayer, depth);
+
+    if (!valid) {
+      alert("Invalid move: suicide is not allowed.");
+      return;
+    }
+
+    // Construct move:
     const newMove = {
       coordinate,
       player: currentPlayer,
       time: new Date().toLocaleTimeString(),
     };
 
-    // Capture Logic
-    const newlyCaptured = 0;
+    // Remove captured stones from moveHistory
+    const newHistory = moveHistory.filter((move) => !captured.includes(move.coordinate));
+    newHistory.push(newMove);
 
-    setMoveHistory([...moveHistory, newMove]);
+    // Update board stat
+    setMoveHistory(newHistory);
     setCapturedStones({
       ...capturedStones,
-      [currentPlayer]: capturedStones[currentPlayer] + newlyCaptured
+      [currentPlayer]: capturedStones[currentPlayer] + captured.length,
     });
-
-    // Next Turn
     setCurrentPlayer(currentPlayer === 'black' ? 'white' : 'black');
   };
-
+  
   // Board is full
   const handleGameEnd = () => {
     setIsGameOver(true);
