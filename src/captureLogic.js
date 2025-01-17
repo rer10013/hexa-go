@@ -1,5 +1,5 @@
-const letterToIndex = (letter) => letter.charCodeAt(0) - 64;
-const indexToLetter = (idx) => String.fromCharCode(idx + 64);
+const letterToIndex = (letter) => letter.charCodeAt(0) - 65;
+const indexToLetter = (idx) => String.fromCharCode(idx + 65);
 
 /**
  * Compute adjacent coordinates of a given cell
@@ -8,43 +8,43 @@ const indexToLetter = (idx) => String.fromCharCode(idx + 64);
  * @returns {string[]} An array of adjacent coordinate strings
  */
 function getAdjacent(coord, depth) {
-  const maxRow = depth * 2;
-  const maxNum = 4 * depth;
-
   const rowLetter = coord.charAt(0);
   const numPart = parseInt(coord.slice(1), 10);
   const rowIndex = letterToIndex(rowLetter);
 
+  const maxRow = depth * 2;
+
+  const isIncreasing = rowIndex < depth;
+  const blockCount = isIncreasing
+    ? (depth + rowIndex) * 2 + 1
+    : (maxRow - rowIndex + depth - 1) * 2 + 1;
+
   const adjacent = [];
 
   // Left
-  if (numPart - 1 >= 1) {
+  if (numPart - 1 >= 1 + (isIncreasing ? 0 : (rowIndex - depth) * 2 + 1)) {
     adjacent.push(`${rowLetter}${numPart - 1}`);
   }
 
   // Right
-  if (numPart + 1 <= maxNum) {
+  if (numPart + 1 <= blockCount + (isIncreasing ? 0 : (rowIndex - depth) * 2 + 1)) {
     adjacent.push(`${rowLetter}${numPart + 1}`);
   }
 
   // Vertical neighbor 
   if (numPart % 2 === 1) {
-    // Odd
+    // Odd - Under
     const belowRowIndex = rowIndex + 1;
-    if (belowRowIndex <= maxRow) {
+    if (belowRowIndex < maxRow) {
       const belowRowLetter = indexToLetter(belowRowIndex);
-      if (numPart + 1 <= maxNum) {
-        adjacent.push(`${belowRowLetter}${numPart + 1}`);
-      }
+      adjacent.push(`${belowRowLetter}${numPart + 1}`);
     }
   } else {
-    // Even
+    // Even - Below
     const aboveRowIndex = rowIndex - 1;
     if (aboveRowIndex >= 1) {
       const aboveRowLetter = indexToLetter(aboveRowIndex);
-      if (numPart - 1 >= 1) {
-        adjacent.push(`${aboveRowLetter}${numPart - 1}`);
-      }
+      adjacent.push(`${aboveRowLetter}${numPart - 1}`);
     }
   }
 
