@@ -42,7 +42,7 @@ function getAdjacent(coord, depth) {
   } else {
     // Even - Below
     const aboveRowIndex = rowIndex - 1;
-    if (aboveRowIndex >= 1) {
+    if (aboveRowIndex >= 0) {
       const aboveRowLetter = indexToLetter(aboveRowIndex);
       adjacent.push(`${aboveRowLetter}${numPart - 1}`);
     }
