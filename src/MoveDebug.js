@@ -1,9 +1,9 @@
 import React, { useState, Fragment } from 'react';
 
-function MoveHistory({ moveHistory }) {
+function MoveDebug({ moveDebug }) {
   const [searchValue] = useState('');
 
-  const filteredHistory = moveHistory.filter((move) =>
+  const filteredHistory = moveDebug.filter((move) =>
     move.coordinate.includes(searchValue)
   );
 
@@ -29,4 +29,4 @@ function MoveHistory({ moveHistory }) {
   );
 }
 
-export default MoveHistory;
+export default MoveDebug;

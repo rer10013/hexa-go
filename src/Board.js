@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import TriCell from './TriCell';
 import './Board.css';
 
-function Board({ depth, onPlaceStone, moveHistory, onGameEnd }) {
+function Board({ depth, onPlaceStone, moveDebug, onGameEnd }) {
   const totalRows = 2 * depth;
 
   // Compute number of Triangles
   const spaceNum = depth * depth * 6;
   useEffect(() => {
-    if (moveHistory.length === spaceNum) {
+    if (moveDebug.length === spaceNum) {
       onGameEnd();
     }
-  }, [moveHistory, spaceNum, onGameEnd]);
+  }, [moveDebug, spaceNum, onGameEnd]);
 
   // Build rows and cells
   const rows = [];
@@ -30,7 +30,7 @@ function Board({ depth, onPlaceStone, moveHistory, onGameEnd }) {
       const coordinate = `${uppercase[rowIndex]}${blockIndex + 1 + (isIncreasing ? 0 : (rowIndex - depth) * 2 + 1)}`;
 
       // Find if stone is placed
-      const stone = moveHistory.find((move) => move.coordinate === coordinate)?.player;
+      const stone = moveDebug.find((move) => move.coordinate === coordinate)?.player;
 
       // Push TriCell
       rowCells.push(

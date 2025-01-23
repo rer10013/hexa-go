@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import Board from './Board';
 import Timer from './Timer';
-import MoveHistory from './MoveHistory';
+import MoveDebug from './MoveDebug';
 import ResignButton from './ResignButton';
 import { evaluateMove } from './captureLogic';
 
 function App() {
   // History
-  const [moveHistory, setMoveHistory] = useState([]);
+  const [moveDebug, setMoveDebug] = useState([]);
 
   // Turn
   const [currentPlayer, setCurrentPlayer] = useState('black');
@@ -22,7 +22,7 @@ function App() {
   const depth = 3;
 
   const buildBoardMapping = () => {
-    return moveHistory.reduce((acc, move) => {
+    return moveDebug.reduce((acc, move) => {
       acc[move.coordinate] = move.player;
       return acc;
     }, {});
@@ -31,7 +31,7 @@ function App() {
   const handlePlaceStone = (coordinate) => {
 
     // Board is full or move already exists.
-    if (isGameOver || moveHistory.find((move) => move.coordinate === coordinate)) {
+    if (isGameOver || moveDebug.find((move) => move.coordinate === coordinate)) {
       return;
     }
 
@@ -52,12 +52,12 @@ function App() {
       time: new Date().toLocaleTimeString(),
     };
 
-    // Remove captured stones from moveHistory
-    const newHistory = moveHistory.filter((move) => !captured.includes(move.coordinate));
+    // Remove captured stones from moveDebug
+    const newHistory = moveDebug.filter((move) => !captured.includes(move.coordinate));
     newHistory.push(newMove);
 
     // Update board stat
-    setMoveHistory(newHistory);
+    setMoveDebug(newHistory);
     setCapturedStones({
       ...capturedStones,
       [currentPlayer]: capturedStones[currentPlayer] + captured.length,
@@ -87,7 +87,7 @@ function App() {
       </div>
 
       {/* Board */}
-      <Board depth={depth} onPlaceStone={handlePlaceStone} moveHistory={moveHistory} onGameEnd={handleGameEnd}/>
+      <Board depth={depth} onPlaceStone={handlePlaceStone} moveDebug={moveDebug} onGameEnd={handleGameEnd}/>
 
       {/* Num of Captured stones */}
       <div className="captured">
@@ -99,7 +99,7 @@ function App() {
       <ResignButton onResign={handleResign} />
 
       {/* History Search */}
-      <MoveHistory moveHistory={moveHistory} />
+      <MoveDebug moveDebug={moveDebug} />
     </div>
   );
 }
