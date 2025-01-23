@@ -18,8 +18,8 @@ function App() {
   // Whether game end
   const [isGameOver, setIsGameOver] = useState(false);
 
-  // depth signing (will be fixed to dynamic button)
-  const depth = 3
+  // Depth signing (will be fixed to dynamic button)
+  const depth = 3;
 
   const buildBoardMapping = () => {
     return moveHistory.reduce((acc, move) => {
