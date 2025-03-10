@@ -3,7 +3,7 @@ import Board from './Board';
 import Timer from './Timer';
 import MoveDebug from './MoveDebug';
 import ResignButton from './ResignButton';
-import { evaluateMove } from './captureLogic';
+import { processMove } from './gameProcessor';
 import { appendMoveToURL, getMovesFromURL } from './moveHistory';
 
 function App() {
@@ -22,49 +22,38 @@ function App() {
   // Board depth (for Tri-Go)
   const depth = 2;
 
-  const buildBoardMapping = (history = moveDebug) => {
-    return history.reduce((acc, move) => {
-      acc[move.coordinate] = move.player;
-      return acc;
-    }, {});
+  // Game state object
+  const getGameState = () => ({
+    moveDebug,
+    currentPlayer,
+    capturedStones,
+  });
+
+  // Update state for game
+  const updateGameState = (newState) => {
+    setMoveDebug(newState.MoveDebug);
+    setCapturedStones(newState.capturedStones);
+    setCurrentPlayer(newState.setCurrentPlayer);
   };
 
-  // Place a stone on the board.
+  // Place a stone on the board
   const handlePlaceStone = (coordinate) => {
     if (isGameOver || moveDebug.find((move) => move.coordinate === coordinate)) {
       return;
     }
 
-    const boardMapping = buildBoardMapping();
-
-    // Evaluate the move using captureLogic
-    const { valid, captured } = evaluateMove(coordinate, boardMapping, currentPlayer, depth);
-    if (!valid) {
+    // Process move using gameProcessor
+    const result = processMove(coordinate, getGameState(), depth);
+    if (!result.valid) {
       alert("Invalid move: suicide is not allowed.");
       return;
     }
-
-    // Build the new move
-    const newMove = {
-      coordinate,
-      player: currentPlayer,
-      time: new Date().toLocaleTimeString(),
-    };
-
-    // Remove any captured stones from moveDebug
-    const newHistory = moveDebug.filter((move) => !captured.includes(move.coordinate));
-    newHistory.push(newMove);
 
     // Append the new move to the URL history
     appendMoveToURL(coordinate);
 
     // Update state
-    setMoveDebug(newHistory);
-    setCapturedStones({
-      ...capturedStones,
-      [currentPlayer]: capturedStones[currentPlayer] + captured.length,
-    });
-    setCurrentPlayer(currentPlayer === 'black' ? 'white' : 'black');
+    updateGameState(result.gameState);
   };
   
   // Handle board full
@@ -82,40 +71,18 @@ function App() {
   useEffect(() => {
     const movesFromURL = getMovesFromURL();
     if (movesFromURL.length > 0) {
-      // We simulate the game from an empty board.
-      let gameState = {
-        moveDebug: [],
-        currentPlayer: 'black',
-        capturedStones: { black: 0, white: 0 }
-      };
-
+      let gameState = getGameState();
       movesFromURL.forEach(move => {
-        const boardMapping = buildBoardMapping(gameState.moveDebug);
-        const { valid, captured } = evaluateMove(move, boardMapping, gameState.currentPlayer, depth);
-
+        const result = processMove(move, gameState, depth);
         // Skip invalid moves
-        if (!valid) {
+        if (!result.valid) {
           console.warn(`Invalid move in URL: ${move}`);
           return;
         }
-        const newMove = {
-          coordinate: move,
-          player: gameState.currentPlayer,
-          time: new Date().toLocaleTimeString(),
-        };
-
-        // Remove any captured stones from our simulated history
-        gameState.moveDebug = gameState.moveDebug.filter((m) => !captured.includes(m.coordinate));
-        gameState.moveDebug.push(newMove);
-        gameState.capturedStones[gameState.currentPlayer] += captured.length;
-        // Switch turn
-        gameState.currentPlayer = gameState.currentPlayer === 'black' ? 'white' : 'black';
+        gameState = result.gameState;
       });
-
       // Update our state with the computed game state.
-      setMoveDebug(gameState.moveDebug);
-      setCapturedStones(gameState.capturedStones);
-      setCurrentPlayer(gameState.currentPlayer);
+      updateGameState(gameState);
     }
   }, []);
 

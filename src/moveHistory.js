@@ -12,7 +12,7 @@ export function appendMoveToURL(move) {
 
 /**
  * Parse the URL path into an array of moves
- * @returns {string[]} An array of moves
+ * @returns {string[]} - An array of moves
  */
 export function getMovesFromURL() {
   const currentPath = window.location.pathname;
