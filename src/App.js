@@ -31,9 +31,9 @@ function App() {
 
   // Update state for game
   const updateGameState = (newState) => {
-    setMoveDebug(newState.MoveDebug);
+    setMoveDebug(newState.moveDebug);
     setCapturedStones(newState.capturedStones);
-    setCurrentPlayer(newState.setCurrentPlayer);
+    setCurrentPlayer(newState.currentPlayer);
   };
 
   // Place a stone on the board
