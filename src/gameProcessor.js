@@ -37,7 +37,7 @@ export function processMove(coordinate, gameState, depth) {
     [gameState.currentPlayer]: gameState.capturedStones[gameState.currentPlayer] + captured.length,
   };
 
-  // Flif turn
+  // Flip turn
   const nextPlayer = gameState.currentPlayer === 'black' ? 'white' : 'black';
 
   return {

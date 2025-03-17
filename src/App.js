@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Board from './Board';
 import Timer from './Timer';
 import MoveDebug from './MoveDebug';
 import ResignButton from './ResignButton';
 import { processMove } from './gameProcessor';
-import { appendMoveToURL, getMovesFromURL } from './moveHistory';
+import { useMoveHistory } from './moveHistory';
 
 function App() {
-  // Move history
+  // Move Debug
   const [moveDebug, setMoveDebug] = useState([]);
+
+  // Move History
+  const { moves, appendMoveToURL } = useMoveHistory();
 
   // Current turn
   const [currentPlayer, setCurrentPlayer] = useState('black');
@@ -23,18 +26,18 @@ function App() {
   const depth = 2;
 
   // Game state object
-  const getGameState = () => ({
+  const getGameState = useCallback(() => ({
     moveDebug,
     currentPlayer,
     capturedStones,
-  });
+  }), [moveDebug, currentPlayer, capturedStones]);
 
   // Update state for game
-  const updateGameState = (newState) => {
+  const updateGameState = useCallback((newState) => {
     setMoveDebug(newState.moveDebug);
     setCapturedStones(newState.capturedStones);
     setCurrentPlayer(newState.currentPlayer);
-  };
+  }, []);
 
   // Place a stone on the board
   const handlePlaceStone = (coordinate) => {
@@ -69,23 +72,22 @@ function App() {
 
   // On page load, initialize the game state from URL moves
   useEffect(() => {
-    const movesFromURL = getMovesFromURL();
-    if (movesFromURL.length > 0) {
+    if (moves.length > 0) {
       let gameState = getGameState();
-      movesFromURL.forEach(move => {
+      moves.forEach(move => {
         const result = processMove(move, gameState, depth);
-        // Skip invalid moves
         if (!result.valid) {
           console.warn(`Invalid move in URL: ${move}`);
           return;
         }
         gameState = result.gameState;
       });
-      // Update our state with the computed game state.
-      updateGameState(gameState);
+      setMoveDebug(gameState.moveDebug);
+      setCapturedStones(gameState.capturedStones);
+      setCurrentPlayer(gameState.currentPlayer);
     }
   }, []);
-
+  
   return (
     <div className="App">
       <h1>Tri-Go (Depth: {depth})</h1>

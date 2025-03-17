@@ -8,7 +8,7 @@ function MoveDebug({ moveDebug }) {
   );
 
   // Debug console
-  const debug = false;
+  const debug = true;
 
   return (
     <div style={{ marginTop: '20px' }}>
