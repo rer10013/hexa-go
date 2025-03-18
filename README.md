@@ -1,6 +1,8 @@
 # Hexa-go
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project currently use vite.
+
+Purpose of this branch is to check board-outer configurations.
 
 ## How to play
 
