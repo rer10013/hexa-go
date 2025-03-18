@@ -1,9 +1,0 @@
-.board-container {
-    display: inline-block;
-  }
-  
-.board-row {
-    display: flex;
-    justify-content: center;
-    margin: 2.6rem 0;
-  }
