@@ -5,6 +5,7 @@ import MoveDebug from './MoveDebug';
 import ResignButton from './ResignButton';
 import { processMove } from './gameProcessor';
 import { useMoveHistory } from './moveHistory';
+import "./App.css";
 
 function App() {
   // Move Debug
