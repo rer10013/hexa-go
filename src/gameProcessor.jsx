@@ -15,7 +15,7 @@ export function processMove(coordinate, gameState, depth) {
   }, {});
 
   // Evaluate move
-  const { valid, captured } = evaluateMove(coordinate, boardMapping, gameState.currentPlayer, depth);
+  const { valid, captured } = evaluateMove(coordinate, boardMapping, gameState.currentPlayer, depth, gameState.capturedStones);
   if (!valid) {
     return { valid, gameState };
   }

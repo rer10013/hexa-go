@@ -98,6 +98,24 @@ function hasLiberty(group, board, depth) {
 }
 
 /**
+ * Determines move is repetitive capture (Pae)
+ * @param {string[]} captured - Array of captured stones at previous.
+ * @param {string} newCoord - The coordinate stone 
+ * @returns {boolean} True if is repetitive capture, otherwise false.
+ */
+function hasRepetitiveCapture(captured, newCoord) {
+  if (length(captured) > 1) {
+    return false
+  }
+
+  if (captured[0] === newCoord) {
+    return True
+  } else {
+    return false
+  }
+}
+
+/**
  * Evaluates captures and suicide.
  * @param {string} newCoord - The coordinate stone 
  * @param {object} board - Current board mapping (before placing the new stone)
@@ -105,7 +123,7 @@ function hasLiberty(group, board, depth) {
  * @param {number} depth - Board depth
  * @returns {object} - { valid: boolean, captured: string[] }
  */
-export function evaluateMove(newCoord, board, currentPlayer, depth) {
+export function evaluateMove(newCoord, board, currentPlayer, depth, previousCaptured) {
   // Create a temporary board
   const tempBoard = { ...board };
   tempBoard[newCoord] = currentPlayer;
@@ -132,7 +150,7 @@ export function evaluateMove(newCoord, board, currentPlayer, depth) {
   // Evaluate connected group
   const selfGroup = getConnectedGroup(newCoord, tempBoard, currentPlayer, depth);
   // If no liberties, then suicide.
-  if (!hasLiberty(selfGroup, tempBoard, depth)) {
+  if (!hasLiberty(selfGroup, tempBoard, depth) || hasRepetitiveCapture(previousCaptured, newCoord)) {
     return {
       valid: false,
       captured: []
