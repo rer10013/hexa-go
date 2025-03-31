@@ -105,13 +105,13 @@ function hasLiberty(group, board, depth) {
  */
 function hasRepetitiveCapture(captured, newCoord) {
   if (captured.length > 1) {
-    return false
+    return false;
   }
 
   if (captured[0] === newCoord) {
-    return True
+    return true;
   } else {
-    return false
+    return false;
   }
 }
 

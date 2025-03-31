@@ -20,6 +20,9 @@ function App() {
   // Captured stones count
   const [capturedStones, setCapturedStones] = useState({ black: 0, white: 0 });
 
+  // Previously captured stones
+  const [previousCapturedStones, setPreviousCapturedStones] = useState([]);
+
   // Game-over flag
   const [isGameOver, setIsGameOver] = useState(false);
 
@@ -31,13 +34,15 @@ function App() {
     moveDebug,
     currentPlayer,
     capturedStones,
-  }), [moveDebug, currentPlayer, capturedStones]);
+    previousCapturedStones,
+  }), [moveDebug, currentPlayer, capturedStones, previousCapturedStones]);
 
   // Update state for game
   const updateGameState = useCallback((newState) => {
     setMoveDebug(newState.moveDebug);
     setCapturedStones(newState.capturedStones);
     setCurrentPlayer(newState.currentPlayer);
+    setPreviousCapturedStones(newState.previousCapturedStones);
   }, []);
 
   // Place a stone on the board
@@ -49,7 +54,7 @@ function App() {
     // Process move using gameProcessor
     const result = processMove(coordinate, getGameState(), depth);
     if (!result.valid) {
-      alert("Invalid move: suicide is not allowed.");
+      alert("Invalid move: suicide or repititive capture is not allowed.");
       return;
     }
 
@@ -86,6 +91,7 @@ function App() {
       setMoveDebug(gameState.moveDebug);
       setCapturedStones(gameState.capturedStones);
       setCurrentPlayer(gameState.currentPlayer);
+      setCapturedStones(gameState.previousCapturedStones);
     }
   }, []);
   

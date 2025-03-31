@@ -15,7 +15,7 @@ export function processMove(coordinate, gameState, depth) {
   }, {});
 
   // Evaluate move
-  const { valid, captured } = evaluateMove(coordinate, boardMapping, gameState.currentPlayer, depth, gameState.capturedStones);
+  const { valid, captured } = evaluateMove(coordinate, boardMapping, gameState.currentPlayer, depth, gameState.previousCapturedStones);
   if (!valid) {
     return { valid, gameState };
   }
@@ -31,11 +31,14 @@ export function processMove(coordinate, gameState, depth) {
   const newMoveDebug = gameState.moveDebug.filter(move => !captured.includes(move.coordinate));
   newMoveDebug.push(newMove);
 
-  // Update captured stones
+  // Update captured stones count
   const newCapturedStones = {
     ...gameState.capturedStones,
     [gameState.currentPlayer]: gameState.capturedStones[gameState.currentPlayer] + captured.length,
   };
+
+  // Update previous stones
+  const newPreviousCapturedStones = captured;
 
   // Flip turn
   const nextPlayer = gameState.currentPlayer === 'black' ? 'white' : 'black';
@@ -46,6 +49,7 @@ export function processMove(coordinate, gameState, depth) {
       moveDebug: newMoveDebug,
       currentPlayer: nextPlayer,
       capturedStones: newCapturedStones,
+      previousCapturedStones: newPreviousCapturedStones
     },
   };
 }
