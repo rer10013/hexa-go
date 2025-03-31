@@ -104,7 +104,7 @@ function hasLiberty(group, board, depth) {
  * @returns {boolean} True if is repetitive capture, otherwise false.
  */
 function hasRepetitiveCapture(captured, newCoord) {
-  if (length(captured) > 1) {
+  if (captured.length > 1) {
     return false
   }
 
