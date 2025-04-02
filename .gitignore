@@ -1,1 +1,8 @@
 node_modules
+.vs
+.vscode
+assets
+temp-dist
+git
+
+index.html
