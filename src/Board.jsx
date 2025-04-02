@@ -46,7 +46,7 @@ function Board({ depth, onPlaceStone, moveDebug, onGameEnd }) {
 
     rows.push(
       <div
-        className={`board-row ${rowIndex % 2 === 1 ? "offset-row" : ""}`}
+        className={`board-row`}
         key={rowIndex}
       >
         {rowCells}
