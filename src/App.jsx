@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Board from './Board';
 import Timer from './Timer';
 import MoveDebug from './MoveDebug';
 import ResignButton from './ResignButton';
 import { processMove } from './gameProcessor';
-import { useMoveHistory } from './moveHistory';
+import { useMoveHistory, getMovesFromURL } from './moveHistory';
 import "./App.css";
 
 function App() {
@@ -12,7 +13,9 @@ function App() {
   const [moveDebug, setMoveDebug] = useState([]);
 
   // Move History
-  const { moves, appendMoveToURL } = useMoveHistory();
+  const [moves, setMoves] = useState([]);
+  const [searchParams] = useSearchParams();
+  const { appendMoveToURL } = useMoveHistory();
 
   // Current turn
   const [currentPlayer, setCurrentPlayer] = useState('black');
@@ -25,6 +28,9 @@ function App() {
 
   // Game-over flag
   const [isGameOver, setIsGameOver] = useState(false);
+
+  // init flag
+  const [init, setInit] = useState(true);
 
   // Board depth (for Tri-Go)
   const depth = 2;
@@ -59,7 +65,9 @@ function App() {
     }
 
     // Append the new move to the URL history
-    appendMoveToURL(coordinate);
+    const updatedMoves = [...moves, coordinate];
+    setMoves(updatedMoves);
+    appendMoveToURL(updatedMoves);
 
     // Update state
     updateGameState(result.gameState);
@@ -78,7 +86,14 @@ function App() {
 
   // On page load, initialize the game state from URL moves
   useEffect(() => {
-    if (moves.length > 0) {
+    if (init) {
+      const initMoves = getMovesFromURL(searchParams);
+  
+      if (moves.length === 0 && initMoves.length > 0) {
+        setMoves(initMoves);
+        return;
+      }
+  
       let gameState = getGameState();
       moves.forEach(move => {
         const result = processMove(move, gameState, depth);
@@ -88,12 +103,11 @@ function App() {
         }
         gameState = result.gameState;
       });
-      setMoveDebug(gameState.moveDebug);
-      setCapturedStones(gameState.capturedStones);
-      setCurrentPlayer(gameState.currentPlayer);
-      setCapturedStones(gameState.previousCapturedStones);
+
+      updateGameState(gameState);
+      setInit(false)
     }
-  }, []);
+  }, [moves, init]);
   
   return (
     <div className="App">

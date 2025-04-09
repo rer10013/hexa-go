@@ -4,14 +4,14 @@
   position: relative;
   display: inline-block;
   padding: 0;
-  margin: -16px;
+  margin: -17px;
 }
 
 .triangle-up {
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   background: #e0e0e0;
 }
-  
+
 .triangle-down {
   clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
   background: #d0d0d0;
