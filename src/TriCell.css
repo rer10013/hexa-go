@@ -7,15 +7,117 @@
   margin: -17px;
 }
 
-.triangle-up {
+.Tri-cell.upper-template {
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  background: #e0e0e0;
+  background: transparent;  
+}
+.Tri-cell.upper-template .centerLine {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: transparent;
+  left: 50%;
+  top: 66.667%;
+  transform-origin: left center;
 }
 
-.triangle-down {
+.Tri-cell.lower-template {
   clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
-  background: #d0d0d0;
+  background: transparent;
 }
+.Tri-cell.lower-template .centerLine {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  left: 50%;
+  top: 33.333%;
+  transform-origin: left center;
+  background: transparent;
+}
+
+
+.Tri-cell.NU .centerLine:nth-child(1) { 
+  transform: rotate(-150deg);
+  background: #444;
+}
+.Tri-cell.NU .centerLine:nth-child(2) {
+  transform: rotate(-30deg);
+  background: #444;
+}
+.Tri-cell.NU .centerLine:nth-child(3) {
+  transform: rotate(90deg);
+  background: #444;
+}
+
+.Tri-cell.ND .centerLine:nth-child(1) {
+  transform: rotate(150deg);
+  background: #444; 
+}
+.Tri-cell.ND .centerLine:nth-child(2) {
+  transform: rotate(30deg);
+  background: #444; 
+}
+.Tri-cell.ND .centerLine:nth-child(3) {
+  transform: rotate(-90deg);
+  background: #444; 
+}
+
+.Tri-cell.LU .centerLine:nth-child(1) {
+  transform: rotate(-30deg);
+  background: #444; 
+}
+.Tri-cell.LU .centerLine:nth-child(2) {
+  transform: rotate(90deg);
+  background: #444; 
+}
+
+.Tri-cell.LD .centerLine:nth-child(1) {
+  transform: rotate(30deg);
+  background: #444; 
+}
+.Tri-cell.LD .centerLine:nth-child(2) {
+  transform: rotate(-90deg);
+  background: #444; 
+}
+
+.Tri-cell.RU .centerLine:nth-child(1) {
+  transform: rotate(-150deg);
+  background: #444; 
+}
+.Tri-cell.RU .centerLine:nth-child(2) {
+  transform: rotate(90deg);
+  background: #444; 
+}
+
+.Tri-cell.RD .centerLine:nth-child(1) {
+  transform: rotate(150deg);
+  background: #444; 
+}
+.Tri-cell.RD .centerLine:nth-child(2) {
+  transform: rotate(-90deg);
+  background: #444; 
+}
+
+.Tri-cell.UD .centerLine:nth-child(1) {
+  transform: rotate(150deg);
+  background: #444; 
+}
+.Tri-cell.UD .centerLine:nth-child(2) {
+  transform: rotate(30deg);
+  background: #444; 
+}
+
+.Tri-cell.DU .centerLine:nth-child(1) {
+  transform: rotate(-150deg);
+  background: #444; 
+}
+.Tri-cell.DU .centerLine:nth-child(2) {
+  transform: rotate(-30deg);
+  background: #444; 
+}
+
 
 .stone {
   position: absolute;
@@ -37,7 +139,7 @@
 
 .coord-label {
   position: absolute;
-  top: 5px;
+  top: 2px;
   left: 5px;
   font-size: 10px;
   color: red;
